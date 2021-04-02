@@ -3,15 +3,27 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Home</title>
+    <%- include("partials/head-default.ejs") %>
 </head>
 
 <body>
 
+    <%- include("partials/navbar-default.ejs") %>
+
+    <div class="container">
+
     <h1>Why doesnt it work?</h1>
     <p>Alrgiht I guess it works</p>
-    <p>Tried out the thing. <%=5+5%>  </p>
+    <p>Tried out the thing. <%=num%>  </p>
+
+    <% if (num % 2 === 0) { %>
+        <h1>It is even</h1>
+    <% } else { %>
+        <h1>It is odd</h1>
+    <% } %>
+
+    </div>
+
 
 </body>
 

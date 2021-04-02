@@ -1,16 +1,24 @@
 const express = require("express")
+const path = require("path")
 
 const app = express()
 
-app.set("view engine", "ejs")
+app.use(express.static(path.join(__dirname, "public")))
+app.set('view engine', 'ejs')
+app.set("views", path.join(__dirname, "/views"))
+
+
+
+
 
 app.get("/", (req, res) =>
-    res.send("<h1>Home page</h1>")
+    res.render("home", {num: Math.floor(Math.random() * 10)})
+
 )
 
 
-app.get("/collect_data", (req, res) =>
-    res.send("<h1>Here I will collect the audio data<\h1>")
+app.get("/collect-data", (req, res) =>
+    res.render("collect-data")
 )
 
 

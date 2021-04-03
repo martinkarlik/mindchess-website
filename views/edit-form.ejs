@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <%- include("partials/head-default.ejs") %>
+    <title>Edit form</title>
+</head>
+
+<body>
+
+<%- include("partials/navbar-default.ejs") %>
+
+<div class="container">
+
+    <h1>This is edit form.</h1>
+
+    <form action="/data/<%=data_details.id%>?_method=PATCH" method="post">
+        <label for="edit_move">Change move:</label>
+        <input id="edit_move" type="text" placeholder="<%= data_details.move_spoken %>" name="new_move_spoken">
+        <button>Submit</button>
+    </form>
+
+
+</div>
+
+
+</body>
+
+</html>

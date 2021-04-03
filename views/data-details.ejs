@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <%- include("partials/head-default.ejs") %>
+    <title>Data details</title>
+</head>
+
+<body>
+
+<%- include("partials/navbar-default.ejs") %>
+
+<div class="container">
+
+    <h1>Here is the data!</h1>
+
+    <p>This was the spoken move: <%= data_details.move_spoken %></p>
+    <a href="/data/<%=data_details.id%>/edit">Edit data</a>
+    <form action="/data/<%=data_details.id%>?_method=DELETE" method="post">
+        <button>Delete</button>
+    </form>
+
+</div>
+
+
+</body>
+
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <%- include("partials/head-default.ejs") %>
+    <title>New data form</title>
+</head>
+
+<body>
+
+    <%- include("partials/navbar-default.ejs") %>
+
+
+    <div class="container">
+
+        <h1>Please type in some move!</h1>
+
+
+        <form action="/data" method="post">
+            <label for="get_move">Spoken move:</label>
+            <input id="get_move" type="text" placeholder="some move" name="spoken_move">
+            <button>Submit</button>
+        </form>
+
+
+    </div>
+
+
+</body>
+
+</html>

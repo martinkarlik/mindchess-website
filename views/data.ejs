@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <%- include("partials/head-default.ejs") %>
+    <title>Data</title>
+</head>
+
+<body>
+
+<%- include("partials/navbar-default.ejs") %>
+
+<div class="container">
+
+    <h1>Here is the data!</h1>
+
+    <ul>
+        <% for (let entry of audio_data) { %>
+            <li><%= entry.move_spoken %> -> <%= entry.move_gt%></li>
+            <a href="/data/<%= entry.id %>">Details</a>
+        <% } %>
+    </ul>
+
+</div>
+
+
+</body>
+
+</html>

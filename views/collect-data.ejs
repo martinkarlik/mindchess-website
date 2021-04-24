@@ -4,19 +4,30 @@
 
 <head>
     <%- include("partials/head-default.ejs") %>
+    <script src="/js/data-collection.js"></script>
     <title>Collect data</title>
 </head>
 
 <body>
 
-<%- include("partials/navbar-default.ejs") %>
+    <%- include("partials/navbar-default.ejs") %>
 
-<div class="container">
+    <div class="container">
 
-    <h1>Here we will collect data!</h1>
-    <a href="/data/new">Play a move</a>
+        <p>Please record yourself saying the move signalled with the green arrow.</p>
+        <p>the chess board</p>
 
-</div>
+        <p class="board"></p>
+
+        <div>
+            <button class="button_start" >Start</button>
+            <button class="button_stop">Stop</button>
+        </div>
+
+        <section class="sound-clips"></section>
+
+
+    </div>
 
 
 </body>

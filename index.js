@@ -2,9 +2,14 @@ const express = require("express");
 const path = require("path");
 const {v4: uuid} = require("uuid");
 const method_override = require("method-override");
-const mongoose = require('mongoose');
-import React from "react";
-import ReactDOM from "react-dom";
+const mongoose = require("mongoose");
+
+const { Chess } = require('chess.js');
+const chess = new Chess();
+chess.load_pgn("d4 d5");
+console.log(chess.ascii());
+const SpokenMove = require("./public/js/spoken-move.js");
+
 
 mongoose.connect('mongodb://localhost:27017/mindChess', {useNewUrlParser: true, useUnifiedTopology: true})
     .then(() => {
@@ -13,26 +18,6 @@ mongoose.connect('mongodb://localhost:27017/mindChess', {useNewUrlParser: true, 
     .catch(() => {
         console.log("Connection rejected!")
     })
-
-const spokenMoveSchema = new mongoose.Schema({
-    gt: String,
-    signal: String
-});
-const SpokenMove = mongoose.model('SpokenMove', spokenMoveSchema);
-const move = new SpokenMove({gt: "NC5", signal: "Najt si fajf"});
-
-
-move.save()
-    .then(() => {
-        console.log("Should be saved.");
-        console.log(move);
-    })
-    .catch((err) => {
-        console.log("Some error.")
-    })
-
-
-
 
 
 const app = express();
@@ -45,30 +30,10 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));
 
 
-const audio_data = [
-    {
-        id: uuid(),
-        move_gt: "NC4",
-        move_spoken: "najt si for"
-    },
-    {
-        id: uuid(),
-        move_gt: "KH2",
-        move_spoken: "kin ejc tu"
-    },
-    {
-        id: uuid(),
-        move_gt: "QF7",
-        move_spoken: "kvin ef senvn"
-    },
-
-]
-
 app.get("/", (req, res) =>
     res.render("home", {num: Math.floor(Math.random() * 10)})
 
 )
-
 
 app.get("/data", (req, res) =>
     res.render("data", {audio_data})
@@ -79,7 +44,6 @@ app.post("/data", (req, res) => {
     audio_data.push({id: uuid(), move_gt: "XXX", move_spoken:spoken_move});
     res.redirect("/data");
 })
-
 
 
 app.get("/data/new", (req, res) =>
@@ -116,9 +80,9 @@ app.delete("/data/:id", (req, res) => {
 })
 
 
-app.get("/collect-data", (req, res) =>
-    res.render("collect-data")
-)
+app.get("/collect-data", (req, res) => {
+    res.render("collect-data");
+})
 
 app.get("*", (req, res) =>
     res.send("Damn.")

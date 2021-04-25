@@ -1,11 +1,16 @@
 
+
+
 let move_history = "";
 let solution = [];
+let chess = Chess();
 
 async function fetchPuzzle() {
     await fetch("https://lichess.org/api/puzzle/daily")
         .then(res => res.json())
         .then(res => {
+
+            console.log("Move history is: " + res.game.pgn);
 
             move_history = res.game.pgn;
             solution = res.puzzle.solution;
@@ -15,8 +20,11 @@ async function fetchPuzzle() {
 }
 
 function setupPosition() {
-    document.querySelector(".board");
+    const board = document.querySelector(".board");
     board.textContent = move_history;
+
+    chess.load_pgn(move_history);
+    board.textContent = chess.ascii();
 }
 
 function setupRecording() {
@@ -25,7 +33,6 @@ function setupRecording() {
     const soundClips = document.querySelector('.sound-clips')
 
     stopButton.disabled = true;
-
 
     if (navigator.mediaDevices.getUserMedia) {
 
@@ -102,10 +109,10 @@ function setupRecording() {
 }
 
 function startup() {
+
     fetchPuzzle().then(() => {
         setupRecording();
     })
 }
 
-
-window.addEventListener('onload', startup, false);
+window.onload = startup;

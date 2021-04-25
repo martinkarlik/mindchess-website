@@ -4,11 +4,8 @@ const {v4: uuid} = require("uuid");
 const method_override = require("method-override");
 const mongoose = require("mongoose");
 
-const { Chess } = require('chess.js');
-const chess = new Chess();
-chess.load_pgn("d4 d5");
-console.log(chess.ascii());
-const SpokenMove = require("./public/js/spoken-move.js");
+
+
 
 
 mongoose.connect('mongodb://localhost:27017/mindChess', {useNewUrlParser: true, useUnifiedTopology: true})
@@ -25,7 +22,8 @@ const app = express();
 app.use(method_override("_method"));
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "public")));
+app.use('/public', express.static(path.join(__dirname, 'public')));
+app.use('/node_modules', express.static(path.join(__dirname, 'node_modules')));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));
 
@@ -63,7 +61,6 @@ app.get("/data/:id/edit", (req, res) => {
 })
 
 
-
 app.patch("/data/:id", (req, res) => {
     const {id} = req.params;
     const {new_move_spoken} = req.body;
@@ -81,8 +78,19 @@ app.delete("/data/:id", (req, res) => {
 
 
 app.get("/collect-data", (req, res) => {
+
+
     res.render("collect-data");
 })
+
+app.post("/collect-data", (req, res) => {
+
+    res.redirect("/collect-data");
+})
+
+
+
+
 
 app.get("*", (req, res) =>
     res.send("Damn.")

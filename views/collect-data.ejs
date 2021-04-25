@@ -4,7 +4,9 @@
 
 <head>
     <%- include("partials/head-default.ejs") %>
-    <script src="/js/data-collection.js"></script>
+    <script src="node_modules/chess.js/chess.js"></script>
+    <script src="public/js/spoken-move.js"></script>
+    <script src="public/js/data-collection.js"></script>
     <title>Collect data</title>
 </head>
 
@@ -17,7 +19,7 @@
         <p>Please record yourself saying the move signalled with the green arrow.</p>
         <p>the chess board</p>
 
-        <p class="board"></p>
+        <pre class="board"></pre>
 
         <div>
             <button class="button_start" >Start</button>

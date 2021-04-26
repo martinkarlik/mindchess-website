@@ -17,8 +17,7 @@
 
     <ul>
         <% for (let entry of audio_data) { %>
-            <li><%= entry.move_spoken %> -> <%= entry.move_gt%></li>
-            <a href="/data/<%= entry.id %>">Details</a>
+            <li><%= entry.signal %> -> <%= entry.gt%></li>
         <% } %>
     </ul>
 

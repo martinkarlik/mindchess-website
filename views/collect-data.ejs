@@ -5,7 +5,7 @@
 <head>
     <%- include("partials/head-default.ejs") %>
     <script src="node_modules/chess.js/chess.js"></script>
-    <script src="public/js/spoken-move.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="public/js/data-collection.js"></script>
     <title>Collect data</title>
 </head>
@@ -22,8 +22,7 @@
         <pre class="board"></pre>
 
         <div>
-            <button class="button_start" >Start</button>
-            <button class="button_stop">Stop</button>
+            <button class="button_record" >Record</button>
         </div>
 
         <section class="sound-clips"></section>

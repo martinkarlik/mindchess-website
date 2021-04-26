@@ -1,38 +1,28 @@
 
 
-
 let move_history = "";
 let solution = [];
 let chess = Chess();
 
-async function fetchPuzzle() {
-    await fetch("https://lichess.org/api/puzzle/daily")
-        .then(res => res.json())
-        .then(res => {
-
-            console.log("Move history is: " + res.game.pgn);
-
-            move_history = res.game.pgn;
-            solution = res.puzzle.solution;
-
-            setupPosition();
-        })
+const fetchPuzzle = async () => {
+    const res = await axios.get("https://lichess.org/api/puzzle/daily");
+    return res.data.game.pgn;
 }
 
-function setupPosition() {
+function setupPosition(pgn) {
     const board = document.querySelector(".board");
-    board.textContent = move_history;
+    // board.textContent = pgn;
 
-    chess.load_pgn(move_history);
+
+    chess.load_pgn(pgn);
     board.textContent = chess.ascii();
 }
 
 function setupRecording() {
-    const startButton = document.querySelector('.button_start');
-    const stopButton = document.querySelector('.button_stop');
+    const recordButton = document.querySelector('.button_record');
     const soundClips = document.querySelector('.sound-clips')
 
-    stopButton.disabled = true;
+    recording = false;
 
     if (navigator.mediaDevices.getUserMedia) {
 
@@ -40,16 +30,15 @@ function setupRecording() {
             var mediaRecorder = new MediaRecorder(stream);
             let chunks = [];
 
-            startButton.onclick = function () {
-                mediaRecorder.start();
-                startButton.disabled = true;
-                stopButton.disabled = false;
-            }
+            recordButton.onclick = function () {
 
-            stopButton.onclick = function () {
-                mediaRecorder.stop();
-                startButton.disabled = false;
-                stopButton.disabled = true;
+                if (recording) {
+                    mediaRecorder.stop();
+                } else {
+                    mediaRecorder.start();
+                }
+
+                recording = !recording;
             }
 
             mediaRecorder.ondataavailable = function (e) {
@@ -79,10 +68,23 @@ function setupRecording() {
                 const blob = new Blob(chunks, {'type': 'audio/ogg; codecs=opus'});
                 audio.controls = true;
                 audio.src = window.URL.createObjectURL(blob);
-                blob.arrayBuffer()
-                    .then((buffer) => {
-                        console.log(buffer)
-                    })
+
+                console.log(chunks);
+                axios({
+                    method: 'post',
+                    url: '/collect-data',
+                    data: {
+                        gt: 'KC4',
+                        signal: 'hello'
+                    }
+                });
+
+                // blob.arrayBuffer()
+                //     .then((buffer) => {
+                //         console.log(buffer);
+                //         console.log(buffer.Int8Array);
+                //
+                //     })
 
 
                 chunks = [];
@@ -110,9 +112,11 @@ function setupRecording() {
 
 function startup() {
 
-    fetchPuzzle().then(() => {
-        setupRecording();
+
+    fetchPuzzle().then((res) => {
+        setupPosition(res);
     })
+    setupRecording();
 }
 
 window.onload = startup;

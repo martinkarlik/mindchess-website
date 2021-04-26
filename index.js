@@ -4,7 +4,7 @@ const {v4: uuid} = require("uuid");
 const method_override = require("method-override");
 const mongoose = require("mongoose");
 
-
+const SpokenMove = require("./public/js/spoken-move");
 
 
 
@@ -33,68 +33,34 @@ app.get("/", (req, res) =>
 
 )
 
-app.get("/data", (req, res) =>
-    res.render("data", {audio_data})
-)
-
-app.post("/data", (req, res) => {
-    const {spoken_move} = req.body;
-    audio_data.push({id: uuid(), move_gt: "XXX", move_spoken:spoken_move});
-    res.redirect("/data");
-})
-
-
-app.get("/data/new", (req, res) =>
-    res.render("new-data-form")
-)
-
-app.get("/data/:id", (req, res) => {
-    const {id} = req.params;
-    const data_details = audio_data.find(it => it.id === id);
-    res.render("data-details", {data_details});
-})
-
-app.get("/data/:id/edit", (req, res) => {
-    const {id} = req.params;
-    const data_details = audio_data.find(it => it.id === id);
-    res.render("edit-form", {data_details});
-})
-
-
-app.patch("/data/:id", (req, res) => {
-    const {id} = req.params;
-    const {new_move_spoken} = req.body;
-    const data_details = audio_data.find(it => it.id === id);
-    data_details.move_spoken = new_move_spoken;
-    res.redirect("/data/");
-})
-
-app.delete("/data/:id", (req, res) => {
-    const {id} = req.params;
-    const data_details = audio_data.find(it => it.id === id);
-    audio_data.pop(data_details);
-    res.redirect("/data/");
-})
-
-
 app.get("/collect-data", (req, res) => {
-
 
     res.render("collect-data");
 })
 
 app.post("/collect-data", (req, res) => {
 
+    const spokenMove = SpokenMove({gt: req.body.gt, signal: req.body.signal});
+    spokenMove.save().then(() => console.log("Should be saved."))
+
     res.redirect("/collect-data");
+})
+
+app.get("/show-data", (req, res) => {
+
+    const audio_data = [
+        {gt: "BF1", signal: "bishop f one"}
+    ]
+    res.render("show-data", {audio_data});
 })
 
 
 
-
-
 app.get("*", (req, res) =>
-    res.send("Damn.")
+    res.send("Invalid address.")
 )
+
+
 
 app.listen(3000, () =>
     console.log("LISTENING ON PORT 3000!")

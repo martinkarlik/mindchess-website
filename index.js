@@ -3,35 +3,6 @@ const path = require("path");
 const {v4: uuid} = require("uuid");
 const method_override = require("method-override");
 const mongoose = require('mongoose');
-import React from "react";
-import ReactDOM from "react-dom";
-
-mongoose.connect('mongodb://localhost:27017/mindChess', {useNewUrlParser: true, useUnifiedTopology: true})
-    .then(() => {
-        console.log("Connection open!")
-    })
-    .catch(() => {
-        console.log("Connection rejected!")
-    })
-
-const spokenMoveSchema = new mongoose.Schema({
-    gt: String,
-    signal: String
-});
-const SpokenMove = mongoose.model('SpokenMove', spokenMoveSchema);
-const move = new SpokenMove({gt: "NC5", signal: "Najt si fajf"});
-
-
-move.save()
-    .then(() => {
-        console.log("Should be saved.");
-        console.log(move);
-    })
-    .catch((err) => {
-        console.log("Some error.")
-    })
-
-
 
 
 

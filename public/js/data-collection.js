@@ -69,15 +69,25 @@ function setupRecording() {
                 audio.controls = true;
                 audio.src = window.URL.createObjectURL(blob);
 
-                console.log(chunks);
-                axios({
-                    method: 'post',
-                    url: '/collect-data',
-                    data: {
-                        gt: 'KC4',
-                        signal: 'hello'
-                    }
+                blob.arrayBuffer().then(res => {
+
+                    const buffer = new Int8Array(res);
+                    console.log(buffer);
+
+                    axios({
+                        method: 'post',
+                        url: '/collect-data',
+                        data: {
+                            gt: 'KC4',
+                            signal: buffer
+                        },
+                        headers: {
+                            'content-type': 'multipart/form-data'
+                        }
+                    });
                 });
+
+
 
                 // blob.arrayBuffer()
                 //     .then((buffer) => {

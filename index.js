@@ -34,11 +34,13 @@ app.get("/", (req, res) =>
 )
 
 app.get("/collect-data", (req, res) => {
-
     res.render("collect-data");
 })
 
 app.post("/collect-data", (req, res) => {
+
+
+    console.log(req.body.signal);
 
     const spokenMove = SpokenMove({gt: req.body.gt, signal: req.body.signal});
     spokenMove.save().then(() => console.log("Should be saved."))

@@ -10,3 +10,9 @@ body{
 .padded {
     padding-top: 40%;
 }
+
+.paddedLess{
+    padding-top: 35%;
+    margin-left: 20%;
+    margin-bottom: 40%;
+}

@@ -1,0 +1,12 @@
+.bg-dark {
+    background-color: #000000!important;
+}
+
+body{
+    background-color: #121212;
+    color: white;
+}
+
+.padded {
+    padding-top: 40%;
+}

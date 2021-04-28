@@ -1,4 +1,6 @@
 
+let mediaRecorder = null;
+
 function setupRecording() {
     const recordButton = document.querySelector('.button_record');
     const soundClips = document.querySelector('.sound-clips')
@@ -8,17 +10,15 @@ function setupRecording() {
     if (navigator.mediaDevices.getUserMedia) {
 
         let onSuccess = function(stream) {
-            var mediaRecorder = new MediaRecorder(stream);
+            mediaRecorder = new MediaRecorder(stream);
             let chunks = [];
 
             recordButton.onclick = function () {
-
                 if (recording) {
                     mediaRecorder.stop();
                 } else {
                     mediaRecorder.start();
                 }
-
                 recording = !recording;
             }
 
@@ -98,54 +98,59 @@ const fetchPuzzle = async () => {
 
 }
 
-function setupPosition(pgn) {
-    // const board = document.querySelector(".board");
-    chess.load_pgn(pgn);
-    console.log(pgn)
-    console.log(chess.fen())
+function setupPosition(chessGame) {
 
+    function updateStatus() {
+        var status = '';
 
+        var moveColor = 'White';
+        if (chessGame.turn() === 'b') {
+            moveColor = 'Black';
+        }
 
-    init(chess.fen())
+        if (chessGame.in_checkmate()) {
+            status = 'Game over, ' + moveColor + ' is in checkmate.';
+        }
 
-}
+        else if (chessGame.in_draw()) {
+            status = 'Game over, drawn position';
+        }
 
-function startup() {
+        else {
+            status = moveColor + ' to move';
 
-    fetchPuzzle().then((res) => {
-        setupPosition(res);
-    })
+            if (chessGame.in_check()) {
+                status += ', ' + moveColor + ' is in check';
+            }
+        }
 
-    // setupRecording();
-}
-
-
-
-var init = function(fenLi) {
-
-    var board = null
-    var game = chess
-    var $status = $('#status')
-    var $fen = $('#fen')
-    var $pgn = $('#pgn')
+        $status.html(status);
+        $fen.html(chessGame.fen());
+        $pgn.html(chessGame.pgn());
+    }
 
     function onDragStart(source, piece, position, orientation) {
-        if (game.game_over()) return false
+        if (chessGame.game_over())
+            return false;
 
         // only pick up pieces for the side to move
-        if ((game.turn() === 'w' && piece.search(/^b/) !== -1) ||
-            (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
+        if ((chessGame.turn() === 'w' && piece.search(/^b/) !== -1) ||
+            (chessGame.turn() === 'b' && piece.search(/^w/) !== -1)) {
 
-            return false
+            return false;
         } else{
             // probably should be somehwere else to check the end of the game as well but well stuff happens here
-            console.log('Piece picked up')
+            console.log('Piece picked up');
+            mediaRecorder.start();
         }
     }
 
     function onDrop(source, target) {
+
+        mediaRecorder.stop();
+
         // see if the move is legal
-        var move = game.move({
+        var move = chessGame.move({
             from: source,
             to: target,
             promotion: 'q' // NOTE: always promote to a queen for example simplicity
@@ -153,69 +158,50 @@ var init = function(fenLi) {
 
         // illegal move
         if (move === null) {
-            console.log('Illegal - go to horny jail')
-            return 'snapback'
+            console.log('Illegal - go to horny jail');
+            return 'snapback';
         } else {
-            console.log('Legit move, bro')
+            console.log('Legit move, bro');
         }
 
-        updateStatus()
+        updateStatus();
     }
 
     function onSnapEnd() {
-        board.position(game.fen())
+        board.position(chessGame.fen());
     }
 
-    function updateStatus() {
-        var status = ''
-
-        var moveColor = 'White'
-        if (game.turn() === 'b') {
-            moveColor = 'Black'
-        }
-
-        // checkmate?
-        if (game.in_checkmate()) {
-            status = 'Game over, ' + moveColor + ' is in checkmate.'
-        }
-
-        // draw?
-        else if (game.in_draw()) {
-            status = 'Game over, drawn position'
-        }
-
-        // game still on
-        else {
-            status = moveColor + ' to move'
-
-            // check?
-            if (game.in_check()) {
-                status += ', ' + moveColor + ' is in check'
-            }
-        }
-
-        $status.html(status)
-        $fen.html(game.fen())
-        $pgn.html(game.pgn())
-    }
 
     var config = {
         draggable: true,
-        position: fenLi,
+        position: chessGame.fen(),
         onDragStart: onDragStart,
         onDrop: onDrop,
         onSnapEnd: onSnapEnd
     }
-    board = Chessboard('myBoard', config)
 
-    console.log(board);
+    const board = Chessboard('myBoard', config);
 
-    updateStatus()
+    let $status = $('#status');
+    let $fen = $('#fen');
+    let $pgn = $('#pgn');
 
-};
+    updateStatus();
+
+}
+
+function startup() {
+
+    setupRecording();
+
+    fetchPuzzle().then((pgn) => {
+        const chessGame = Chess();
+        chessGame.load_pgn(pgn);
+        setupPosition(chessGame);
+    })
 
 
+}
 
-let chess = Chess();
 
 window.onload = startup;

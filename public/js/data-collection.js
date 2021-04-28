@@ -50,22 +50,18 @@ function setupRecording() {
                 audio.controls = true;
                 audio.src = window.URL.createObjectURL(blob);
 
-                blob.arrayBuffer().then(res => {
+                const formData = new FormData();
 
-                    const buffer = new Int8Array(res);
-                    console.log(buffer);
+                formData.append('audio_blob', blob);
+                formData.append('move_gt', 'KC4');
 
-                    axios({
-                        method: 'post',
-                        url: '/collect-data',
-                        data: {
-                            gt: 'KC4',
-                            signal: buffer
-                        },
-                        headers: {
-                            'content-type': 'multipart/form-data'
-                        }
-                    });
+                axios({
+                    method: 'post',
+                    url: '/collect-data',
+                    data: formData,
+                    headers: {
+                        'Content-Type': `multipart/form-data; boundary=${formData._boundary}`
+                    },
                 });
 
                 chunks = [];
@@ -162,6 +158,9 @@ function setupPosition(chessGame) {
             return 'snapback';
         } else {
             console.log('Legit move, bro');
+
+
+
         }
 
         updateStatus();

@@ -2,23 +2,48 @@ const express = require("express");
 const path = require("path");
 const {v4: uuid} = require("uuid");
 const method_override = require("method-override");
+
+
 const mongoose = require("mongoose");
-const multer = require("multer");
-
 const SpokenMove = require("./public/js/spoken-move");
+const multer = require('multer');
+const GridFsStorage = require("multer-gridfs-storage");
 
 
+const mongoUri = 'mongodb://localhost:27017/mindChess';
+const connection = mongoose.createConnection(mongoUri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+});
 
-mongoose.connect('mongodb://localhost:27017/mindChess', {useNewUrlParser: true, useUnifiedTopology: true})
-    .then(() => {
-        console.log("Connection open!")
-    })
-    .catch(() => {
-        console.log("Connection rejected!")
-    })
+let gridFS;
+connection.once("open", () => {
+    gridFS = new mongoose.mongo.GridFSBucket(connection.db, {
+        bucketName: "spokenmoves"
+    });
+});
+
+const storage = new GridFsStorage({
+    url: mongoUri,
+    file: (req, file) => {
+        return new Promise((resolve, reject) => {
+
+            console.log("Storage: ", req.body);
+
+            // filename: move_gt + uuid();
+
+            const fileInfo = {
+                filename: uuid(),
+                bucketName: "spokenmoves"
+            };
+            resolve(fileInfo);
+        });
+    }
+});
+
+const upload = multer({ storage });
 
 
-let processMultipart = multer( { storage: multer.memoryStorage() });
 
 const app = express();
 
@@ -40,13 +65,12 @@ app.get("/collect-data", (req, res) => {
     res.render("collect-data");
 })
 
-app.post("/collect-data", (req, res) => {
+app.post("/collect-data", upload.single('audio_blob'), (req, res) => {
 
+    console.log("Handling post request: ", req.body);
 
-    // Checkout multer!
-
-    const spokenMove = SpokenMove({gt: req.body.gt, signal: req.body.signal});
-    spokenMove.save().then(() => console.log("Should be saved."))
+    // const spokenMove = SpokenMove({gt: req.body.gt, signal: req.body.signal});
+    // spokenMove.save().then(() => console.log("Should be saved."));
 
     res.redirect("/collect-data");
 })

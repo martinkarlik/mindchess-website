@@ -3,6 +3,7 @@ const path = require("path");
 const {v4: uuid} = require("uuid");
 const method_override = require("method-override");
 const mongoose = require("mongoose");
+const multer = require("multer");
 
 const SpokenMove = require("./public/js/spoken-move");
 
@@ -16,6 +17,8 @@ mongoose.connect('mongodb://localhost:27017/mindChess', {useNewUrlParser: true, 
         console.log("Connection rejected!")
     })
 
+
+let processMultipart = multer( { storage: multer.memoryStorage() });
 
 const app = express();
 
@@ -40,7 +43,7 @@ app.get("/collect-data", (req, res) => {
 app.post("/collect-data", (req, res) => {
 
 
-    console.log(req.body.signal);
+    // Checkout multer!
 
     const spokenMove = SpokenMove({gt: req.body.gt, signal: req.body.signal});
     spokenMove.save().then(() => console.log("Should be saved."))

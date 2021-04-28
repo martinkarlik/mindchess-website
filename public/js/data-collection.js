@@ -1,28 +1,9 @@
 
-
-let move_history = "";
-let solution = [];
-let chess = Chess();
-
-const fetchPuzzle = async () => {
-    const res = await axios.get("https://lichess.org/api/puzzle/daily");
-    return res.data.game.pgn;
-}
-
-function setupPosition(pgn) {
-    const board = document.querySelector(".board");
-    // board.textContent = pgn;
-
-
-    chess.load_pgn(pgn);
-    board.textContent = chess.ascii();
-}
-
 function setupRecording() {
     const recordButton = document.querySelector('.button_record');
     const soundClips = document.querySelector('.sound-clips')
 
-    recording = false;
+    let recording = false;
 
     if (navigator.mediaDevices.getUserMedia) {
 
@@ -69,20 +50,23 @@ function setupRecording() {
                 audio.controls = true;
                 audio.src = window.URL.createObjectURL(blob);
 
-                let formData = new FormData();
-                formData.append('audio_blob', blob);
+                blob.arrayBuffer().then(res => {
 
-                axios({
-                    method: 'post',
-                    url: "/collect-data",
-                    data: formData,
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                        // ; boundary=${formData._boundary}`,
-                    }
-                })
+                    const buffer = new Int8Array(res);
+                    console.log(buffer);
 
-
+                    axios({
+                        method: 'post',
+                        url: '/collect-data',
+                        data: {
+                            gt: 'KC4',
+                            signal: buffer
+                        },
+                        headers: {
+                            'content-type': 'multipart/form-data'
+                        }
+                    });
+                });
 
                 chunks = [];
 
@@ -107,13 +91,131 @@ function setupRecording() {
     }
 }
 
-function startup() {
 
+const fetchPuzzle = async () => {
+    const res = await axios.get("https://lichess.org/api/puzzle/daily");
+    return res.data.game.pgn;
+
+}
+
+function setupPosition(pgn) {
+    // const board = document.querySelector(".board");
+    chess.load_pgn(pgn);
+    console.log(pgn)
+    console.log(chess.fen())
+
+
+
+    init(chess.fen())
+
+}
+
+function startup() {
 
     fetchPuzzle().then((res) => {
         setupPosition(res);
     })
-    setupRecording();
+
+    // setupRecording();
 }
+
+
+
+var init = function(fenLi) {
+
+    var board = null
+    var game = chess
+    var $status = $('#status')
+    var $fen = $('#fen')
+    var $pgn = $('#pgn')
+
+    function onDragStart(source, piece, position, orientation) {
+        if (game.game_over()) return false
+
+        // only pick up pieces for the side to move
+        if ((game.turn() === 'w' && piece.search(/^b/) !== -1) ||
+            (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
+
+            return false
+        } else{
+            // probably should be somehwere else to check the end of the game as well but well stuff happens here
+            console.log('Piece picked up')
+        }
+    }
+
+    function onDrop(source, target) {
+        // see if the move is legal
+        var move = game.move({
+            from: source,
+            to: target,
+            promotion: 'q' // NOTE: always promote to a queen for example simplicity
+        })
+
+        // illegal move
+        if (move === null) {
+            console.log('Illegal - go to horny jail')
+            return 'snapback'
+        } else {
+            console.log('Legit move, bro')
+        }
+
+        updateStatus()
+    }
+
+    function onSnapEnd() {
+        board.position(game.fen())
+    }
+
+    function updateStatus() {
+        var status = ''
+
+        var moveColor = 'White'
+        if (game.turn() === 'b') {
+            moveColor = 'Black'
+        }
+
+        // checkmate?
+        if (game.in_checkmate()) {
+            status = 'Game over, ' + moveColor + ' is in checkmate.'
+        }
+
+        // draw?
+        else if (game.in_draw()) {
+            status = 'Game over, drawn position'
+        }
+
+        // game still on
+        else {
+            status = moveColor + ' to move'
+
+            // check?
+            if (game.in_check()) {
+                status += ', ' + moveColor + ' is in check'
+            }
+        }
+
+        $status.html(status)
+        $fen.html(game.fen())
+        $pgn.html(game.pgn())
+    }
+
+    var config = {
+        draggable: true,
+        position: fenLi,
+        onDragStart: onDragStart,
+        onDrop: onDrop,
+        onSnapEnd: onSnapEnd
+    }
+    board = Chessboard('myBoard', config)
+
+    console.log(board);
+
+    updateStatus()
+
+};
+
+
+
+let chess = Chess();
 
 window.onload = startup;

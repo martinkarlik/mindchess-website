@@ -4,9 +4,14 @@
 
 <head>
     <%- include("partials/head-default.ejs") %>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="node_modules/chess.js/chess.js"></script>
+    <script src="node_modules/@chrisoakman/chessboardjs/dist/chessboard-1.0.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
     <script src="public/js/data-collection.js"></script>
+
+    <link rel="stylesheet" href="node_modules/@chrisoakman/chessboardjs/dist/chessboard-1.0.0.min.css"/>
     <title>Collect data</title>
 </head>
 
@@ -16,10 +21,17 @@
 
     <div class="container">
 
-        <p>Please record yourself saying the move signalled with the green arrow.</p>
+        <div id="myBoard" style="width: 400px"></div>
+        <label>Status:</label>
+        <div id="status"></div>
+        <label>PGN:</label>
+        <div id="pgn"></div>
+
+                <p>Please record yourself saying the move signalled with the green arrow.</p>
         <p>the chess board</p>
 
         <pre class="board"></pre>
+
 
         <div>
             <button class="button_record" >Record</button>

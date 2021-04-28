@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@chrisoakman/chessboardjs": "^1.0.0",
     "axios": "^0.21.1",
     "babel": "^6.23.0",
     "babel-preset-env": "^1.7.0",

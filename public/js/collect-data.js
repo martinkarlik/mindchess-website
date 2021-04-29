@@ -1,4 +1,3 @@
-
 let movePlayed = "";
 let mediaRecorder = null;
 
@@ -202,43 +201,6 @@ function startup() {
 
 }
 
-function expandConfig (config) {
-    // default for orientation is white
-    if (config.orientation !== 'black') config.orientation = 'white'
-
-    // default for showNotation is true
-    if (config.showNotation !== false) config.showNotation = true
-
-    // default for draggable is false
-    if (config.draggable !== true) config.draggable = false
-
-    // default for dropOffBoard is 'snapback'
-    if (config.dropOffBoard !== 'trash') config.dropOffBoard = 'snapback'
-
-    // default for sparePieces is false
-    if (config.sparePieces !== true) config.sparePieces = false
-
-    // draggable must be true if sparePieces is enabled
-    if (config.sparePieces) config.draggable = true
-
-    // default piece theme is wikipedia
-    if (!config.hasOwnProperty('pieceTheme') ||
-        (!isString(config.pieceTheme) && !isFunction(config.pieceTheme))) {
-        config.pieceTheme = '../public/img/chesspieces/wikipedia/{piece}.png'
-    }
-
-    // animation speeds
-    if (!validAnimationSpeed(config.appearSpeed)) config.appearSpeed = DEFAULT_APPEAR_SPEED
-    if (!validAnimationSpeed(config.moveSpeed)) config.moveSpeed = DEFAULT_MOVE_SPEED
-    if (!validAnimationSpeed(config.snapbackSpeed)) config.snapbackSpeed = DEFAULT_SNAPBACK_SPEED
-    if (!validAnimationSpeed(config.snapSpeed)) config.snapSpeed = DEFAULT_SNAP_SPEED
-    if (!validAnimationSpeed(config.trashSpeed)) config.trashSpeed = DEFAULT_TRASH_SPEED
-
-    // throttle rate
-    if (!validThrottleRate(config.dragThrottleRate)) config.dragThrottleRate = DEFAULT_DRAG_THROTTLE_RATE
-
-    return config
-}
 
 
 window.onload = startup;

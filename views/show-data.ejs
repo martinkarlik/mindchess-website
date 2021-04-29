@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <%- include("partials/head-default.ejs") %>
+
+    <title>MindChess | Data</title>
+</head>
+
+<body>
+
+<%- include("partials/navbar-default.ejs") %>
+
+<div class="container">
+
+    <h3 class="display-6">With your contribution, we have recordings of the following moves!</h3>
+
+    <div class="row">
+
+        <div class="col-sm">
+            <ul class="list-group">
+
+                <% if (Object.keys(stored_spokenmoves).length === 0) { %>
+                <li class="list-group-item">
+                    We don't have any recording yet.
+                </li>
+                <% } else { %>
+                    <% for (let key of Object.keys(stored_spokenmoves)) { %>
+                        <li class="list-group-item">
+                            <%= key %> => <%= stored_spokenmoves[key] %>x
+                        </li>
+
+                    <% } %>
+                <% } %>
+            </ul>
+        </div>
+
+        <div class="col-sm">
+            <% if (Object.keys(stored_spokenmoves).length === 0) { %>
+                <img src="public/images/thumbs_down.png" width="60%" alt="thumbs up"/>
+            <% } else { %>
+                <img src="public/images/thumbs_up.png" width="60%" alt="thumbs up"/>
+            <% } %>
+        </div>
+
+
+
+    </div>
+
+
+
+
+</div>
+
+
+</body>
+
+</html>

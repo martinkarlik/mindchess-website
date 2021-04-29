@@ -1,0 +1,39 @@
+.bg-dark {
+    background-color: #000000!important;
+}
+
+body{
+    background-color: #121212;
+    color: white;
+}
+
+.padded {
+    padding-top: 40%;
+}
+
+.paddedLess{
+    padding-top: 35%;
+    margin-left: 20%;
+    margin-bottom: 40%;
+}
+.white-1e1d7 {
+    background-color:white;color:#b58863
+}
+
+.black-3c85d{
+    background-color:black;color:#f0d9b5
+}
+
+.bottom-00{
+    position:relative;
+    bottom:0;
+}
+
+.smessage{
+    display: none;
+}
+
+/*.smaller{*/
+/*    font-size: 70%*/
+/*}*/
+

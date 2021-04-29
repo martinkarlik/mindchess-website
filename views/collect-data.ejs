@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <%- include("partials/head-default.ejs") %>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script src="node_modules/chess.js/chess.js"></script>
+    <script src="public/js/chessboard.js"></script>
+
+    <script src="public/js/collect-data.js"></script>
+
+
+    <link rel="stylesheet" href="public/css/chessboard.css"/>
+    <link rel="stylesheet" href="public/css/custom.css"/>
+
+
+
+    <title>MindChess | Contribute</title>
+</head>
+
+<body>
+<%- include("partials/navbar-default.ejs") %>
+
+<div class="container">
+
+    <h3 class="display-1">Daily Puzzle</h3>
+    <h5 class="display-8">Please say the move, while dragging the piece! Your data will be used to improve our voice recognition system.</h5>
+    <h5 class="display-8">After solving the puzzle, you can keep playing the game, or come back tomorrow for another puzzle. &#128522;</h5>
+    <br>
+
+    <h3 class="display-6"><span id="status"></span></h3>
+    <div class="row">
+
+        <div class="col-sm">
+            <div>
+                <div id="myBoard" style="width: 80%"></div>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div>
+                <div id="message" class="smessage">
+                    <img src="public/images/voice_loaderrr.gif" width="160" alt="recording"/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="clip" style="margin: 10px"></div>
+
+</div>
+
+
+
+</body>
+
+</html>

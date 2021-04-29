@@ -1,4 +1,3 @@
-
 let mediaRecorder = null;
 
 function setupRecording() {
@@ -87,6 +86,15 @@ function setupRecording() {
     }
 }
 
+function displayMessage(){
+    var message = document.getElementById('message')
+    message.style.display = 'block'
+}
+
+function hideMessage(){
+    var message = document.getElementById('message')
+    message.style.display = 'none'
+}
 
 const fetchPuzzle = async () => {
     const res = await axios.get("https://lichess.org/api/puzzle/daily");
@@ -138,12 +146,14 @@ function setupPosition(chessGame) {
             // probably should be somehwere else to check the end of the game as well but well stuff happens here
             console.log('Piece picked up');
             mediaRecorder.start();
+            displayMessage();
         }
     }
 
     function onDrop(source, target) {
 
         mediaRecorder.stop();
+        hideMessage()
 
         // see if the move is legal
         var move = chessGame.move({

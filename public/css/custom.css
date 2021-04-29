@@ -29,3 +29,11 @@ body{
     bottom:0;
 }
 
+.smessage{
+    display: none;
+}
+
+/*.smaller{*/
+/*    font-size: 70%*/
+/*}*/
+

@@ -4,7 +4,8 @@
 
 <head>
     <%- include("partials/head-default.ejs") %>
-    <title>Data</title>
+
+    <title>Recorded Clips</title>
 </head>
 
 <body>
@@ -16,8 +17,15 @@
     <h1>Here is the data!</h1>
 
     <ul>
-        <% for (let entry of audio_data) { %>
-            <li><%= entry.signal %> -> <%= entry.gt%></li>
+        <% for (let entry of files) { %>
+
+            <article class="clip">
+                <p><%= entry.filename.split("-")[0] %></p>
+                <audio controls='true' src=<%=  %>>
+                </audio>
+
+            </article>
+
         <% } %>
     </ul>
 

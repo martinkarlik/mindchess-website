@@ -3,11 +3,12 @@ const path = require("path");
 const {v4: uuid} = require("uuid");
 const method_override = require("method-override");
 
-
 const mongoose = require("mongoose");
-const SpokenMove = require("./public/js/spoken-move");
+
 const multer = require('multer');
+
 const GridFsStorage = require("multer-gridfs-storage");
+// var Grid = require("gridfs-stream");
 
 
 const mongoUri = 'mongodb://localhost:27017/mindChess';
@@ -16,7 +17,8 @@ const connection = mongoose.createConnection(mongoUri, {
     useUnifiedTopology: true
 });
 
-let gridFS;
+
+let gridFS = null;
 connection.once("open", () => {
     gridFS = new mongoose.mongo.GridFSBucket(connection.db, {
         bucketName: "spokenmoves"
@@ -28,14 +30,14 @@ const storage = new GridFsStorage({
     file: (req, file) => {
         return new Promise((resolve, reject) => {
 
-            console.log("Storage: ", req.body);
-
-            // filename: move_gt + uuid();
+            console.log("req.body: ", req.body);
+            console.log("file: ", file);
 
             const fileInfo = {
-                filename: uuid(),
+                filename: file.originalname + "-" + uuid(),
                 bucketName: "spokenmoves"
             };
+
             resolve(fileInfo);
         });
     }
@@ -77,11 +79,37 @@ app.post("/collect-data", upload.single('audio_blob'), (req, res) => {
 
 app.get("/show-data", (req, res) => {
 
-    const audio_data = [
-        {gt: "BF1", signal: "bishop f one"}
-    ]
-    res.render("show-data", {audio_data});
+    gridFS.find().toArray((err, files) => {
+
+        if (!files || files.length === 0) {
+
+            res.render('show-data', { files: null });
+        } else {
+
+            res.render('show-data', { files: files});
+        }
+    });
+
+
 })
+
+// app.get("/show-data/:filename", (req, res) => {
+//
+//     gridFS.find().toArray((err, files) => {
+//
+//         if (!files || files.length === 0) {
+//
+//             res.render('show-data', { files: null });
+//         } else {
+//
+//             gridFS.openDownloadStreamByName(req.params.filename).pipe(res);
+//
+//             res.render('show-data', { files: files});
+//         }
+//     });
+//
+// })
+
 
 
 

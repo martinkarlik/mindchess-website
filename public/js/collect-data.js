@@ -1,3 +1,4 @@
+let movePlayed = "";
 let mediaRecorder = null;
 
 function setupRecording() {
@@ -48,11 +49,11 @@ function setupRecording() {
                 const blob = new Blob(chunks, {'type': 'audio/ogg; codecs=opus'});
                 audio.controls = true;
                 audio.src = window.URL.createObjectURL(blob);
+                chunks = [];
 
                 const formData = new FormData();
 
-                formData.append('audio_blob', blob);
-                formData.append('move_gt', 'KC4');
+                formData.append('audio_blob', blob, movePlayed);
 
                 axios({
                     method: 'post',
@@ -62,8 +63,6 @@ function setupRecording() {
                         'Content-Type': `multipart/form-data; boundary=${formData._boundary}`
                     },
                 });
-
-                chunks = [];
 
                 deleteButton.onclick = function (e) {
                     let eventTarget = e.target;
@@ -152,9 +151,6 @@ function setupPosition(chessGame) {
 
     function onDrop(source, target) {
 
-        mediaRecorder.stop();
-        hideMessage()
-
         // see if the move is legal
         var move = chessGame.move({
             from: source,
@@ -162,16 +158,19 @@ function setupPosition(chessGame) {
             promotion: 'q' // NOTE: always promote to a queen for example simplicity
         })
 
+
+
+
         // illegal move
         if (move === null) {
             console.log('Illegal - go to horny jail');
             return 'snapback';
         } else {
+            movePlayed = move.san;
             console.log('Legit move, bro');
-
-
-
         }
+
+        mediaRecorder.stop();
 
         updateStatus();
     }

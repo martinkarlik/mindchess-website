@@ -76,20 +76,25 @@ app.post("/collect-data", upload.single('audio_blob'), (req, res) => {
 // Just streaming them to EJS turn out to be problematic.
 
 
-// app.get("/show-data", (req, res) => {
-//
-//
-//     gridFS.find().toArray((err, files) => {
-//         console.log(files);
-//         if (!files || files.length === 0) {
-//
-//             res.render('show-data', { files: null });
-//         } else {
-//
-//             res.render('show-data', { files: files});
-//         }
-//     });
-// })
+app.get("/show-data", (req, res) => {
+
+    let stored_spokenmoves = {};
+
+    gridFS.find().toArray((err, files) => {
+
+        for (let i = 0; i < files.length; i++) {
+            let move_gt = files[i].filename.split('-')[0];
+            if (stored_spokenmoves[move_gt]) {
+                stored_spokenmoves[move_gt] += 1;
+            } else {
+                stored_spokenmoves[move_gt.toString()] = 1;
+            }
+        }
+        res.render('show-data', { stored_spokenmoves: stored_spokenmoves});
+    });
+
+
+})
 
 
 app.get("*", (req, res) =>

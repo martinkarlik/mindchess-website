@@ -14,20 +14,28 @@
 
 <div class="container">
 
-    <h1>Here is the data!</h1>
+    <h3 class="display-5">With your contribution, we have recordings of the following moves!</h3>
+
+    <div class="col-sm">
+        <ul>
+            <% for (let key of Object.keys(stored_spokenmoves)) { %>
+                <li>
+                    <%= key %> => <%= stored_spokenmoves[key] %>x
+                </li>
+
+            <% } %>
+        </ul>
+    </div>
+
+<!--    <div class="col-sm">-->
+<!--        <img src="public/images/voice_loaderrr.gif" width="160" alt="recording"/>-->
+<!--    </div>-->
 
 
-    <% for (file of files) { %>
-
-        <% console.log(file) %>
-
-        <article class="clip">
-            <p><%= file.filename.split("-")[0] %></p>
-            <audio controls src="http://localhost:3000/98d750d7-cde3-4aeb-a95b-6fda48a03641"></audio>
-        </article>
 
 
-    <% } %>
+    </div>
+
 
 
 

@@ -71,11 +71,6 @@ app.post("/collect-data", upload.single('audio_blob'), (req, res) => {
 })
 
 
-// We wanted to show the stored audio files on the browser, but we didn't manage to get it to work in time.
-// The audio files are, however, being stored to mongo database, and we can retrieve them and get all the information,
-// Just streaming them to EJS turn out to be problematic.
-
-
 app.get("/show-data", (req, res) => {
 
     let stored_spokenmoves = {};

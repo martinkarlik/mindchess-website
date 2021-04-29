@@ -5,7 +5,7 @@
 <head>
     <%- include("partials/head-default.ejs") %>
 
-    <title>Recorded Clips</title>
+    <title>MindChess | Data</title>
 </head>
 
 <body>
@@ -14,23 +14,35 @@
 
 <div class="container">
 
-    <h3 class="display-5">With your contribution, we have recordings of the following moves!</h3>
+    <h3 class="display-6">With your contribution, we have recordings of the following moves!</h3>
 
-    <div class="col-sm">
-        <ul>
-            <% for (let key of Object.keys(stored_spokenmoves)) { %>
-                <li>
-                    <%= key %> => <%= stored_spokenmoves[key] %>x
+    <div class="row">
+
+        <div class="col-sm">
+            <ul class="list-group">
+
+                <% if (Object.keys(stored_spokenmoves).length === 0) { %>
+                <li class="list-group-item">
+                    We don't have any recording yet.
                 </li>
+                <% } else { %>
+                    <% for (let key of Object.keys(stored_spokenmoves)) { %>
+                        <li class="list-group-item">
+                            <%= key %> => <%= stored_spokenmoves[key] %>x
+                        </li>
 
+                    <% } %>
+                <% } %>
+            </ul>
+        </div>
+
+        <div class="col-sm">
+            <% if (Object.keys(stored_spokenmoves).length === 0) { %>
+                <img src="public/images/thumbs_down.png" width="60%" alt="thumbs up"/>
+            <% } else { %>
+                <img src="public/images/thumbs_up.png" width="60%" alt="thumbs up"/>
             <% } %>
-        </ul>
-    </div>
-
-<!--    <div class="col-sm">-->
-<!--        <img src="public/images/voice_loaderrr.gif" width="160" alt="recording"/>-->
-<!--    </div>-->
-
+        </div>
 
 
 

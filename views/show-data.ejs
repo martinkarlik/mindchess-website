@@ -16,18 +16,20 @@
 
     <h1>Here is the data!</h1>
 
-    <ul>
-        <% for (let entry of files) { %>
 
-            <article class="clip">
-                <p><%= entry.filename.split("-")[0] %></p>
-                <audio controls='true' src=<%=  %>>
-                </audio>
+    <% for (file of files) { %>
 
-            </article>
+        <% console.log(file) %>
 
-        <% } %>
-    </ul>
+        <article class="clip">
+            <p><%= file.filename.split("-")[0] %></p>
+            <audio controls src="http://localhost:3000/98d750d7-cde3-4aeb-a95b-6fda48a03641"></audio>
+        </article>
+
+
+    <% } %>
+
+
 
 </div>
 

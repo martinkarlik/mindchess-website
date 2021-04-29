@@ -1,77 +1,75 @@
 let movePlayed = "";
 let mediaRecorder = null;
 
+
+function displayMessage(){
+    var message = document.getElementById('message')
+    message.style.display = 'block'
+}
+
+function hideMessage(){
+    var message = document.getElementById('message')
+    message.style.display = 'none'
+}
+
+const fetchPuzzle = async () => {
+
+    const res = await axios.get("https://lichess.org/api/puzzle/daily");
+    return res.data.game.pgn;
+
+}
+
+
 function setupRecording() {
-    const recordButton = document.querySelector('.button_record');
-    const soundClips = document.querySelector('.sound-clips')
-
-    let recording = false;
-
     if (navigator.mediaDevices.getUserMedia) {
 
         let onSuccess = function(stream) {
             mediaRecorder = new MediaRecorder(stream);
             let chunks = [];
 
-            recordButton.onclick = function () {
-                if (recording) {
-                    mediaRecorder.stop();
-                } else {
-                    mediaRecorder.start();
-                }
-                recording = !recording;
-            }
-
             mediaRecorder.ondataavailable = function (e) {
                 chunks.push(e.data);
             }
 
             mediaRecorder.onstop = function () {
-                console.log("data available after MediaRecorder.stop() called.");
 
-                const clipContainer = document.createElement('article');
-                const clipLabel = document.createElement('p');
-                const audio = document.createElement('audio');
-                const deleteButton = document.createElement('button');
+                if (movePlayed !== "") {
+                    const clipContainer = document.querySelector('.clip');
+                    clipContainer.innerHTML = "";
 
-                clipContainer.classList.add('clip');
-                audio.setAttribute('controls', '');
-                deleteButton.textContent = 'Delete';
-                deleteButton.className = 'button_delete';
+                    const clipLabel = document.createElement('h3');
+                    clipLabel.classList.add('display-6');
+                    clipLabel.textContent = movePlayed;
 
-                clipLabel.textContent = "KC4";
+                    const audio = document.createElement('audio');
+                    audio.setAttribute('controls', '');
+                    audio.setAttribute('style', 'float: left');
 
-                clipContainer.appendChild(audio);
-                clipContainer.appendChild(clipLabel);
-                clipContainer.appendChild(deleteButton);
-                soundClips.appendChild(clipContainer);
 
-                const blob = new Blob(chunks, {'type': 'audio/ogg; codecs=opus'});
-                audio.controls = true;
-                audio.src = window.URL.createObjectURL(blob);
-                chunks = [];
+                    clipContainer.appendChild(audio);
+                    clipContainer.appendChild(clipLabel);
 
-                const formData = new FormData();
 
-                formData.append('audio_blob', blob, movePlayed);
+                    const blob = new Blob(chunks, {'type': 'audio/ogg; codecs=opus'});
+                    audio.controls = true;
+                    audio.src = window.URL.createObjectURL(blob);
+                    console.log(audio.src);
 
-                axios({
-                    method: 'post',
-                    url: '/collect-data',
-                    data: formData,
-                    headers: {
-                        'Content-Type': `multipart/form-data; boundary=${formData._boundary}`
-                    },
-                });
+                    chunks = [];
 
-                deleteButton.onclick = function (e) {
-                    let eventTarget = e.target;
-                    eventTarget.parentNode.parentNode.removeChild(eventTarget.parentNode);
+                    const formData = new FormData();
+                    formData.append('audio_blob', blob, movePlayed);
+
+                    axios({
+                        method: 'post',
+                        url: '/collect-data',
+                        data: formData,
+                        headers: {
+                            'Content-Type': `multipart/form-data; boundary=${formData._boundary}`
+                        },
+                    });
                 }
-
             }
-
-
         }
 
         let onError = function(error) {
@@ -85,21 +83,7 @@ function setupRecording() {
     }
 }
 
-function displayMessage(){
-    var message = document.getElementById('message')
-    message.style.display = 'block'
-}
 
-function hideMessage(){
-    var message = document.getElementById('message')
-    message.style.display = 'none'
-}
-
-const fetchPuzzle = async () => {
-    const res = await axios.get("https://lichess.org/api/puzzle/daily");
-    return res.data.game.pgn;
-
-}
 
 function setupPosition(chessGame) {
 
@@ -158,21 +142,20 @@ function setupPosition(chessGame) {
             promotion: 'q' // NOTE: always promote to a queen for example simplicity
         })
 
-
-
-
         // illegal move
         if (move === null) {
-            console.log('Illegal - go to horny jail');
-            return 'snapback';
+            movePlayed = "";
         } else {
             movePlayed = move.san;
-            console.log('Legit move, bro');
         }
 
         mediaRecorder.stop();
-
+        hideMessage();
         updateStatus();
+
+        if (move === null) {
+            return 'snapback';
+        }
     }
 
     function onSnapEnd() {

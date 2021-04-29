@@ -4,18 +4,17 @@ const {v4: uuid} = require("uuid");
 const method_override = require("method-override");
 
 const mongoose = require("mongoose");
-
+const MongoClient = require('mongodb');
 const multer = require('multer');
-
 const GridFsStorage = require("multer-gridfs-storage");
-// var Grid = require("gridfs-stream");
 
 
 const mongoUri = 'mongodb://localhost:27017/mindChess';
 const connection = mongoose.createConnection(mongoUri, {
     useNewUrlParser: true,
     useUnifiedTopology: true
-});
+})
+
 
 
 let gridFS = null;
@@ -46,7 +45,6 @@ const storage = new GridFsStorage({
 const upload = multer({ storage });
 
 
-
 const app = express();
 
 app.use(method_override("_method"));
@@ -69,55 +67,34 @@ app.get("/collect-data", (req, res) => {
 
 app.post("/collect-data", upload.single('audio_blob'), (req, res) => {
 
-    console.log("Handling post request: ", req.body);
-
-    // const spokenMove = SpokenMove({gt: req.body.gt, signal: req.body.signal});
-    // spokenMove.save().then(() => console.log("Should be saved."));
-
     res.redirect("/collect-data");
 })
 
-app.get("/show-data", (req, res) => {
 
-    gridFS.find().toArray((err, files) => {
-
-        if (!files || files.length === 0) {
-
-            res.render('show-data', { files: null });
-        } else {
-
-            res.render('show-data', { files: files});
-        }
-    });
+// We wanted to show the stored audio files on the browser, but we didn't manage to get it to work in time.
+// The audio files are, however, being stored to mongo database, and we can retrieve them and get all the information,
+// Just streaming them to EJS turn out to be problematic.
 
 
-})
-
-// app.get("/show-data/:filename", (req, res) => {
+// app.get("/show-data", (req, res) => {
+//
 //
 //     gridFS.find().toArray((err, files) => {
-//
+//         console.log(files);
 //         if (!files || files.length === 0) {
 //
 //             res.render('show-data', { files: null });
 //         } else {
 //
-//             gridFS.openDownloadStreamByName(req.params.filename).pipe(res);
-//
 //             res.render('show-data', { files: files});
 //         }
 //     });
-//
 // })
-
-
 
 
 app.get("*", (req, res) =>
     res.send("Invalid address.")
 )
-
-
 
 app.listen(3000, () =>
     console.log("LISTENING ON PORT 3000!")

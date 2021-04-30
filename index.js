@@ -4,7 +4,6 @@ const {v4: uuid} = require("uuid");
 const method_override = require("method-override");
 
 const mongoose = require("mongoose");
-const MongoClient = require('mongodb');
 const multer = require('multer');
 const GridFsStorage = require("multer-gridfs-storage");
 
@@ -14,7 +13,6 @@ const connection = mongoose.createConnection(mongoUri, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
-
 
 
 let gridFS = null;

@@ -1,5 +1,5 @@
 ## MindChess Website
-This is a website for collecting audio data to train a voice-controlled chess system.
+This is a website for collecting audio data to train a voice-controlled system for a chess application.
 ## Installation
 To be able to use database for displaying collected data, [Mongo](https://www.mongodb.com) is required. However, the rest of the website can function properly without it.
   1. Download or clone the repository

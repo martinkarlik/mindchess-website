@@ -33,7 +33,8 @@ body{
     display: none;
 }
 
-/*.smaller{*/
-/*    font-size: 70%*/
-/*}*/
+.col-sm{
+    pointer-events: none;
+    cursor: default;
+}
 

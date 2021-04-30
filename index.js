@@ -73,18 +73,25 @@ app.get("/show-data", (req, res) => {
 
     let stored_spokenmoves = {};
 
-    gridFS.find().toArray((err, files) => {
+    if (gridFS) {
+        gridFS.find().toArray((err, files) => {
 
-        for (let i = 0; i < files.length; i++) {
-            let move_gt = files[i].filename.split('-')[0];
-            if (stored_spokenmoves[move_gt]) {
-                stored_spokenmoves[move_gt] += 1;
-            } else {
-                stored_spokenmoves[move_gt.toString()] = 1;
+            for (let i = 0; i < files.length; i++) {
+                let move_gt = files[i].filename.split('-')[0];
+                if (stored_spokenmoves[move_gt]) {
+                    stored_spokenmoves[move_gt] += 1;
+                } else {
+                    stored_spokenmoves[move_gt.toString()] = 1;
+                }
             }
-        }
-        res.render('show-data', { stored_spokenmoves: stored_spokenmoves});
-    });
+            res.render('show-data', { stored_spokenmoves: stored_spokenmoves});
+        });
+    } else {
+        res.render('show-data', { stored_spokenmoves: {}});
+
+    }
+
+
 
 
 })

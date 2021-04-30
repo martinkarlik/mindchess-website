@@ -12,5 +12,5 @@ To be able to use database for displaying collected data, [Mongo](https://www.mo
   ```bash
   npm start
   ```
-  5. The server should be running on the port 3000 in your local host. To open, go to http://localhost:3000/
+  5. The server should be running on the port 3000 in your local host. To open it, go to http://localhost:3000/
     

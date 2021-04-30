@@ -27,9 +27,6 @@ const storage = new GridFsStorage({
     file: (req, file) => {
         return new Promise((resolve, reject) => {
 
-            console.log("req.body: ", req.body);
-            console.log("file: ", file);
-
             const fileInfo = {
                 filename: file.originalname + "-" + uuid(),
                 bucketName: "spokenmoves"

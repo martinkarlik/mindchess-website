@@ -73,6 +73,7 @@ app.get("/show-data", (req, res) => {
 
     let stored_spokenmoves = {};
 
+    // gridFS is null if MongoDB cannot be accessed
     if (gridFS) {
         gridFS.find().toArray((err, files) => {
 

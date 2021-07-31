@@ -1,5 +1,6 @@
 ## Introduction
 This is a website for collecting audio data to train a voice-controlled system for a chess application.
+
 ## Installation
 To be able to use database for displaying collected data, [Mongo](https://www.mongodb.com) is required. However, the rest of the website can function properly without it.
   1. Download or clone the repository
@@ -14,3 +15,15 @@ To be able to use database for displaying collected data, [Mongo](https://www.mo
   ```
   5. The server should be running on the port 3000 in your local host. To open it, go to http://localhost:3000/
     
+## Screenshots
+
+'Home' destination
+<img src="screenshot1.png" width="600" alt="Home">
+
+
+'Collect data' destination
+<img src="screenshot2.png" width="600" alt="Collect data">
+
+
+'Show data' destination
+<img src="screenshot3.png" width="600" alt="Show data">

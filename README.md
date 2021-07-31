@@ -17,13 +17,17 @@ To be able to use database for displaying collected data, [Mongo](https://www.mo
     
 ## Screenshots
 
-'Home' destination <br>
+'Home' destination 
+<br>
 <img src="screenshot1.png" width="600" alt="Home">
 
 
-'Collect data' destination <br>
+<br> 
+'Collect data' destination 
+<br>
 <img src="screenshot2.png" width="600" alt="Collect data">
 
-
-'Show data' destination <br>
+<br>
+'Show data' destination 
+<br>
 <img src="screenshot3.png" width="600" alt="Show data">
